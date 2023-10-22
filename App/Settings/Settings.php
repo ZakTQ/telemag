@@ -15,7 +15,7 @@ class Settings implements Settings_Interface
     {
         $this->config = require_once APP_PATH . DIRECTORY_SEPARATOR  . "env.php";
         $this->bot_name = $this->config["bot_name"];
-        $this->bot_id = $this->config["bot-id"];
+        $this->bot_id = $this->config["bot_id"];
         $this->token = $this->config["token"];
     }
 

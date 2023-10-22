@@ -1,0 +1,21 @@
+2023-10-22 19:22:38 {
+    "update_id": 497512257,
+    "message": {
+        "message_id": 77,
+        "from": {
+            "id": 1022158394,
+            "is_bot": false,
+            "first_name": "uptime",
+            "username": "uptime101",
+            "language_code": "ru"
+        },
+        "chat": {
+            "id": 1022158394,
+            "first_name": "uptime",
+            "username": "uptime101",
+            "type": "private"
+        },
+        "date": 1697867234,
+        "text": "привет"
+    }
+}
