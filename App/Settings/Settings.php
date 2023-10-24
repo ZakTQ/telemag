@@ -10,6 +10,7 @@ class Settings implements Settings_Interface
     private string $bot_name;
     private int $bot_id;
     private array $config;
+    private array $routes;
 
     public function __construct()
     {
@@ -17,6 +18,7 @@ class Settings implements Settings_Interface
         $this->bot_name = $this->config["bot_name"];
         $this->bot_id = $this->config["bot_id"];
         $this->token = $this->config["token"];
+        $this->routes = require_once APP_PATH . DIRECTORY_SEPARATOR  . "routes" . DIRECTORY_SEPARATOR . "routes.php";
     }
 
     public function getBotName(): string
@@ -32,5 +34,10 @@ class Settings implements Settings_Interface
     public function getToken(): string
     {
         return $this->token;
+    }
+
+    public function getRoutes(): array
+    {
+        return $this->routes;
     }
 }

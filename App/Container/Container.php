@@ -15,7 +15,6 @@ class Container
     public readonly Settings_Interface $settings;
     public readonly Router_Interface $router;
 
-
     public function __construct()
     {
         $this->initServices();
@@ -25,6 +24,8 @@ class Container
     {
         $this->request = new Request();
         $this->settings = new Settings();
-        $this->router = new Router();
+        $this->router = new Router(
+            $this->settings->getRoutes(),
+        );
     }
 }

@@ -2,74 +2,73 @@
 
 namespace App\Router;
 
+use App\Router\Route;
 use App\Logger\Logger;
 use App\Router\Router_Interface;
+use Controllers\Main_Controller;
 
 class Router implements Router_Interface
 {
-    public readonly string $time;
-    public readonly array $json;
+    private array $json;
+    private array $routes = [
+        "message" => [],
 
-    public readonly string $uri;
+    ];
 
-    public function __construct()
+    public function __construct($routes)
     {
-        $this->time = date("Y-m-d H:i:s");
+        foreach ($routes as $route) {
+            $this->initRoutes($route);
+        }
+        //dd($this->routes);
     }
 
-    public function matched(string $token, string $method, string $data)
+    public function matched(string $token, string $data): void
     {
+        if (!$data) {
+            die;
+        }
+
         $this->json = $this->decodeJson($data);
+        //key message
+        $method = array_keys($this->json)[1];
+        //key command
+        $command = $this->json[$method]["text"];
+        /** @var Route $route */
+        $route = $this->routes[$method][$command];
 
-        $getQuery = [
-            'reply_markup' => json_encode(array(
-                'keyboard' => array(
-                    array(
-                        array(
-                            'text' => 'Тестовая кнопка 1',
-                            'url' => 'YOUR BUTTON URL',
-                        ),
-                        array(
-                            'text' => 'Тестовая кнопка 2',
-                            'url' => 'YOUR BUTTON URL',
-                        ),
-                    )
-                ),
-                'one_time_keyboard' => FALSE,
-                'resize_keyboard' => TRUE,
-            ))
-        ];
+        $action = $route->getAction();
+        $controller = $action[0];
+        $func = $action[1];
 
-        $ch = curl_init(
-            $this->getUri(
-                $token,
-                "/sendMessage?"
-            ) . http_build_query($getQuery)
-        );
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-        curl_setopt($ch, CURLOPT_HEADER, false);
+        $chat_id = $this->json["message"]["chat"]["id"];
+        //from user
+        $user_id = $this->json["message"]["from"]["id"];
 
-        $result = curl_exec($ch);
-        echo $result;
-        curl_close($ch);
+        $uri = $this->getUri($token, '/sendMessage?');
 
-        Logger::writeLogFile($this->json, $this->time);
+        $controller = new $controller();
+        $controller->$func($uri, $chat_id);
     }
 
-    
+    private function initRoutes(Route $route): void
+    {
+        $this->routes[$route->getMethod()][$route->getCommand()] = $route;
+    }
+
     private function decodeJson(string $data): array
     {
-        return json_decode($data, true);
+        $json = json_decode($data, true);
+        Logger::writeLogFile($json);
+
+        return $json;
     }
 
     private function getUri(string $token, string $method): string
     {
         //$uri = "https://api.telegram.org/bot{token}/{method}";
-
         $uri = "https://api.telegram.org/bot" . $token . $method;
 
         return $uri;
     }
-
 }

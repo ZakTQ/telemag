@@ -1,6 +1,7 @@
 <?php
 
 namespace App;
+
 use App\Container\Container;
 
 class App
@@ -14,10 +15,14 @@ class App
 
     public function run()
     {
-        $this->container->router->matched(
-            $this->container->settings->getToken(),
-            $this->container->request->getMethod(),
-            $this->container->request->getData(),
-        );
+        $method = $this->container->request->getMethod();
+        if ($method === "POST") {
+            $this->container->router->matched(
+                $this->container->settings->getToken(),
+                $this->container->request->getData(),
+            );
+        } else {
+            die;
+        }
     }
 }

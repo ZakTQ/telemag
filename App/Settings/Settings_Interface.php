@@ -9,4 +9,6 @@ interface Settings_Interface
     public function getBotId(): int;
 
     public function getToken(): string;
+
+    public function getRoutes(): array;
 }
