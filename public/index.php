@@ -15,3 +15,11 @@ function autoload($class)
     $path = str_replace("\\", "/", $path);
     require_once $path;
 }
+
+function dd($item)
+{
+    echo "<pre>";
+    var_dump($item);
+    echo "</pre>";
+    die();
+}

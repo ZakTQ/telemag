@@ -14,11 +14,10 @@ class App
 
     public function run()
     {
-        /** @var Container  $this->container */
         $this->container->router->matched(
             $this->container->settings->getToken(),
-            $this->container->settings->getBotId(),
-            $this->container->settings->getBotName()
+            $this->container->request->getMethod(),
+            $this->container->request->getData(),
         );
     }
 }
