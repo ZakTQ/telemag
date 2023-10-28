@@ -18,8 +18,7 @@ class App
         $method = $this->container->request->getMethod();
         if ($method === "POST") {
             $this->container->router->matched(
-                $this->container->settings->getToken(),
-                $this->container->request->getData(),
+                $this->container->request->getData()
             );
         } else {
             die;

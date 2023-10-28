@@ -2,29 +2,14 @@
 
 namespace Controllers;
 
-use App\Controller\Controller;
+use App\Core\Controller\Controller;
 
 class Main_Controller extends Controller
 {
 
-    public function start($uri, $chat_id)
+    public function start($chat_id)
     {
-        /*
-        $getQuery = array(
-            "chat_id"     => $chat_id,
-            "text"      => "Новое сообщение из формы",
-            "parse_mode" => "html"
-        );
-        $ch = curl_init($uri . http_build_query($getQuery));
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-        curl_setopt($ch, CURLOPT_HEADER, false);
-
-        $resultQuery = curl_exec($ch);
-        curl_close($ch);
-
-        echo $resultQuery;
-*/
+        $uri = $this->getUri('/sendMessage?');
 
         $getQuery = [
             "chat_id" => $chat_id,
@@ -35,11 +20,11 @@ class Main_Controller extends Controller
             //         array(
             //             array(
             //                 'text' => 'Тестовая кнопка 1',
-            //                 'url' => 'YOUR BUTTON URL',
+            //                 'url' => 'https://www.youtube.com/',
             //             ),
             //             array(
             //                 'text' => 'Тестовая кнопка 2',
-            //                 'url' => 'YOUR BUTTON URL',
+            //                 'callback_data' => 'test_2',
             //             ),
             //         )
             //     ),
@@ -48,13 +33,6 @@ class Main_Controller extends Controller
             // )),
         ];
 
-        $ch = curl_init($uri . http_build_query($getQuery));
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-        curl_setopt($ch, CURLOPT_HEADER, false);
-
-        $result = curl_exec($ch);
-        print_r($result);
-        curl_close($ch);
+        $this->view()->sendMessage($uri, $getQuery);
     }
 }
